@@ -13,3 +13,10 @@ export const getLatestTemplate = async () => {
     const result = await pool.query(sql);
     return result.rows[0];
 };
+
+export const updateTemplateById = async (id, content) => {
+    const sql = 'UPDATE templates SET content = $1 WHERE id = $2 RETURNING *';
+
+    const result = await pool.query(sql, [content, id]);
+    return result.rows[0];
+};

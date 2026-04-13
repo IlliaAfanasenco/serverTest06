@@ -16,5 +16,5 @@ app.use('/api', routes)
 
 
 app.listen(PORT, () => {
-    console.log('Start 5000')
+    console.log(`START ${PORT}`)
 })
