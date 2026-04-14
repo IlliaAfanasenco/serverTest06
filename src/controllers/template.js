@@ -1,6 +1,15 @@
 import {createTemplate, getLatestTemplate, updateTemplateById} from "../models/template.js";
 import Handlebars from 'handlebars'
 
+export const VARIABLES = ["name", "email", "meal"]
+
+export const getVariables = (req, res)=> {
+    return res.json({
+        variables: VARIABLES
+    })
+}
+
+
 export const saveTemplate = async (req, res) => {
     try {
         const {content} = req.body
@@ -35,19 +44,24 @@ export const updateTemplate = async (req, res) => {
     }
 }
 
-export const previewTemplate = async (req, res) =>{
+export const previewTemplate = async (req, res) => {
     try {
         const {content, variables} = req.body
 
         if (!content) return res.status(400).json({error: 'no content'})
-        if (!variables) return res.status(400).json({error: 'no variables'})
+        if(variables !== undefined && (typeof variables !== 'object' || variables === null)) {
+            return res.status(400).json({error: 'variables type error'})
+        }
 
-const template = Handlebars.compile(content)
+      const invalidVaribals = Object.keys(variables).filter((key) => !VARIABLES.includes(key))
+
+        if (invalidVaribals.length > 0) {return res.status(400).json({error: 'invalid variables'})}
+
+        const template = Handlebars.compile(content)
         const html = template(variables || {})
 
         return res.json({html})
-    }
-    catch (error) {
+    } catch (error) {
         res.status(500).json({error: error.message})
     }
 }
