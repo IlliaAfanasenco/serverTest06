@@ -53,7 +53,7 @@ export const previewTemplate = async (req, res) => {
             return res.status(400).json({error: 'variables type error'})
         }
 
-      const invalidVaribals = Object.keys(variables).filter((key) => !VARIABLES.includes(key))
+        const invalidVaribals = Object.keys(variables).filter((key) => !VARIABLES.includes(key))
 
         if (invalidVaribals.length > 0) {return res.status(400).json({error: 'invalid variables'})}
 
